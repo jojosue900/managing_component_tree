@@ -1,34 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React, { useState } from "react";
+import InputArea from "./InputArea";
+import ToDoItem from "./ToDoItem";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [items, setItems] = useState([]);
+
+  function addItem(inputText) {
+    setItems((prevItems) => {
+      return [...prevItems, inputText];
+    });
+  }
+
+  function deleteItem(id) {
+    setItems((prevItems) => {
+      return prevItems.filter((item, index) => {
+        return index !== id;
+      });
+    });
+  }
 
   return (
-    <>
+    <div className="container">
+      <div className="heading">
+        <h1>To-Do List</h1>
+      </div>
+      <InputArea onAdd={addItem} />
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <ul>
+          {items.map((todoItem, index) => (
+            <ToDoItem
+              key={index}
+              id={index}
+              text={todoItem}
+              onChecked={deleteItem}
+            />
+          ))}
+        </ul>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
